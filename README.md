@@ -1,0 +1,1 @@
+# Gigabyte_R272-Z32_Fan_Adapters
