@@ -13,7 +13,7 @@ set_global_fn(72)
 drive_tray = cube(drive_width,4,drive_height)
 
 fan_block = (
-        cube((drive_width*4+spacing*3)-2,4,70).right(1).up(3.5) +
+        cube((drive_width*4+spacing*4),4,70).left(spacing/2).up(3.5) +
         drive_tray.left(0) +
         drive_tray.right(offset) +
         drive_tray.right(offset*2) +
