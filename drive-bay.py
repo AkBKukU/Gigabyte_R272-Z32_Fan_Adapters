@@ -7,10 +7,18 @@ drive_width=11.8
 drive_height=77
 offset = drive_width + spacing
 full_width = (drive_width * 4 + spacing * 3)
+thickness=25
+fan_mount_wall=1
+tab_width=3
+tab_depth=2
+tab_len=8
+
+fan_size = 60
+fan_mount_pitch = 50
 
 set_global_fn(72)
 
-drive_tray = cube(drive_width,4,drive_height)
+drive_tray = cube(drive_width,thickness,drive_height)
 
 fan_block = (
         cube((drive_width*4+spacing*4),4,70).left(spacing/2).up(3.5) +
@@ -28,8 +36,10 @@ def fan_mount(d=80,p=71.5):
         mount_pitch=p/2
         fan_radius = d/2
         fan_hole = (cylinder(fan_depth*2,fan_radius,fan_radius))
+        fan_block = cube([d+2,d+2,fan_depth*4]).left(d/2+1).back(d/2+1).down(fan_depth*4-0.01)
         return (
                 fan_hole +
+                fan_block +
                 cylinder(fan_depth*2,mount_hole,mount_hole).right(mount_pitch).forward(mount_pitch) +
                 cylinder(fan_depth*2,mount_hole,mount_hole).left(mount_pitch).forward(mount_pitch) +
                 cylinder(fan_depth*2,mount_hole,mount_hole).right(mount_pitch).back(mount_pitch) +
@@ -45,6 +55,27 @@ def fan_cover(radius=63,depth=10,thick=3,legs=6):
         cap = cylinder(thick,radius-depth,radius-depth)-cylinder(thick+2,radius-depth-thick,radius-depth-thick).down(1)
         return arc_copies(legs,radius-depth)(support)+cap.up(depth-thick)
 
-difference()(fan_block - (rotate(90, 0, 0)(fan_mount(60,50)).right(full_width/2).up(drive_height/2).forward(10) ) +
-             rotate(90, 0, 0)(fan_cover(radius=33,depth=15,thick=3,legs=6)).right(full_width/2).up(drive_height/2)
-             ).save_as_scad()
+def drive_slots(drives=4):
+    plate = cube((drive_width*drives+spacing*drives),thickness,drive_height-spacing).left(spacing/2).up(spacing/2)
+    for i in range(0,drives):
+        plate += drive_tray.right(offset*i)
+    return plate
+
+
+def drive_latch_front(drives=4):
+    plate = cube((drive_width*drives+spacing*drives),thickness,drive_height).left(spacing/2)
+
+    #Bottom tabs
+    for i in range(0,drives):
+        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width/2-tab_width/2)+(offset*i)).down(tab_depth).forward(thickness-tab_len)
+
+    #Top tabs
+    for i in range(0,drives-1):
+        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width+spacing/2-tab_width/2)+(offset*i)).forward(thickness-tab_len).up(drive_height-tab_depth)
+    return plate
+
+difference()(
+    drive_latch_front() -
+    (rotate(90, 0, 0)(fan_mount(fan_size,fan_mount_pitch)).right(full_width/2).up(drive_height/2).forward(fan_mount_wall) ) +
+    rotate(90, 0, 0)(fan_cover(radius=33,depth=15,thick=3,legs=6)).right(full_width/2).up(drive_height/2)
+).save_as_scad()
