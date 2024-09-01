@@ -7,11 +7,13 @@ drive_width=11.8
 drive_height=77
 offset = drive_width + spacing
 full_width = (drive_width * 4 + spacing * 3)
-thickness=25
-fan_mount_wall=1
+thickness=20
+fan_mount_wall=3
 tab_width=3
 tab_depth=2
-tab_len=8
+tab_len=6
+tab_bottom_inset=6
+tab_top_inset=12
 
 fan_size = 60
 fan_mount_pitch = 50
@@ -32,7 +34,7 @@ print("Len: "+str(drive_width * 4 + spacing * 3))
 
 def fan_mount(d=80,p=71.5):
         fan_depth = 25
-        mount_hole=4.5/2
+        mount_hole=5/2
         mount_pitch=p/2
         fan_radius = d/2
         fan_hole = (cylinder(fan_depth*2,fan_radius,fan_radius))
@@ -47,7 +49,6 @@ def fan_mount(d=80,p=71.5):
         )
 
 
-#
 
 def fan_cover(radius=63,depth=10,thick=3,legs=6):
 
@@ -67,11 +68,19 @@ def drive_latch_front(drives=4):
 
     #Bottom tabs
     for i in range(0,drives):
-        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width/2-tab_width/2)+(offset*i)).down(tab_depth).forward(thickness-tab_len)
+        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width/2-tab_width/2)+(offset*i)).down(tab_depth).forward(tab_bottom_inset)
+
+    #Bottom tabs Holes
+    for i in range(0,drives):
+        plate -= cube([spacing,thickness,spacing*2]).right((drive_width/2-spacing/2)+(offset*i)).down(spacing).forward(tab_bottom_inset+tab_len)
 
     #Top tabs
     for i in range(0,drives-1):
-        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width+spacing/2-tab_width/2)+(offset*i)).forward(thickness-tab_len).up(drive_height-tab_depth)
+        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width+spacing/2-tab_width/2)+(offset*i)).forward(tab_top_inset).up(drive_height-tab_depth*1.25)
+
+    #Top tabs Holes
+    for i in range(0,drives-1):
+        plate -= cube([spacing,thickness,spacing*2]).right((drive_width)+(offset*i)).forward(tab_top_inset+tab_len).up(drive_height-spacing)
     return plate
 
 difference()(
