@@ -79,8 +79,8 @@ def drive_latch_front(drives=4):
         plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width+spacing/2-tab_width/2)+(offset*i)).forward(tab_top_inset).up(drive_height-tab_depth*1.25)
 
     #Top tabs Holes
-    for i in range(0,drives-1):
-        plate -= cube([spacing,thickness,spacing*2]).right((drive_width)+(offset*i)).forward(tab_top_inset+tab_len).up(drive_height-spacing)
+    for i in range(0,drives+2):
+        plate -= cube([spacing,thickness,spacing*2]).right((-spacing)+(offset*i)).forward(tab_top_inset+tab_len).up(drive_height-spacing)
     return plate
 
 difference()(
