@@ -21,3 +21,5 @@ This is a simple plate that adapts an 80x80x25mm fan to fit in the space of the 
 ## drive-bay
 
 These are additional fan mounts that can be installed in the front of the server to add 60x60x25mm fans. These are installed in the U.2 drive bays but *do not* protrude into the space where the drives fit. If you don't use the original sleds to mount the drives you can have the drives behind the fans.
+
+This project was made possible by [Noctua](https://noctua.at/) by providing the fans used.
