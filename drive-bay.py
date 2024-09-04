@@ -13,7 +13,8 @@ tab_width=3
 tab_depth=2
 tab_len=6
 tab_bottom_inset=6
-tab_top_inset=12
+tab_top_inset=15
+tab_top_len=3
 
 fan_size = 60
 fan_mount_pitch = 50
@@ -76,11 +77,11 @@ def drive_latch_front(drives=4):
 
     #Top tabs
     for i in range(0,drives-1):
-        plate += cube([tab_width,tab_len,tab_depth*2]).right((drive_width+spacing/2-tab_width/2)+(offset*i)).forward(tab_top_inset).up(drive_height-tab_depth*1.25)
+        plate += cube([tab_width,tab_top_len,tab_depth*2]).right((drive_width+spacing/2-tab_width/2)+(offset*i)).forward(tab_top_inset).up(drive_height-tab_depth*1.25)
 
     #Top tabs Holes
     for i in range(0,drives+2):
-        plate -= cube([spacing,thickness,spacing*2]).right((-spacing)+(offset*i)).forward(tab_top_inset+tab_len).up(drive_height-spacing)
+        plate -= cube([spacing,thickness,spacing*2]).right((-spacing)+(offset*i)).forward(tab_top_inset+tab_top_len).up(drive_height-spacing)
     return plate
 
 difference()(
